@@ -59,7 +59,15 @@ shapeFit <- function (x, nLmom = 4, samplesByCols = TRUE) {
   
   if ( any(id) ) {
     
-    warning(paste0(sum(id), " out of ", length(id), " rows are identical!"))
+    if ( samplesByCols ) {
+      
+      warning(paste0(sum(id), " out of ", length(id), " row(s) are identical!"))
+      
+    }else{
+      
+      warning(paste0(sum(id), " out of ", length(id), " column(s) are identical!"))
+      
+    }
     
     lmoms[id, 2:nLmom] <- 0
   }
