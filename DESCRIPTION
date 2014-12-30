@@ -1,0 +1,12 @@
+Package: shape
+Title: Shape analysis of high-throughput experiments data
+Version: 1.0.0
+Author: Kwame Okrah and Hector Corrada-Bravo
+Maintainer: Kwame Okrah <kwame.okrah@gmail.com>
+Description: This package provides a statistical method
+    for assessing the shape (skewness and kurtosis) of
+    gene expression measurements obtained from
+    high-throughput genomic experiments.
+Depends: R (>= 3.1.2)
+License: Artistic-2.0
+LazyData: true

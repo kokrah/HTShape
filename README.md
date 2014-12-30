@@ -1,9 +1,10 @@
 shape: Shape analysis of high-throughput experiments data.
 ==========================================================
 
-We implement the ideas in "Shape analysis 
-of high-throughput transcriptomics experiment data", 
-which has its foundations in the theory of L-moments.
+This package provides a statistical method
+for assessing the shape (skewness and kurtosis) 
+of gene expression measurements obtained from
+high-throughput genomic experiments.
 
 ## Installation
 
