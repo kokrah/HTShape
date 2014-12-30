@@ -32,26 +32,26 @@ weightFactors <- function (r, n) {
 
 #' Weight Coefficients for Sample L-moments.
 #' 
-#' @param nlmom The number of sample l-moments.
+#' @param nLmom The number of sample l-moments.
 #' @param n The sample size.
 #' @return A matrix of weight factors.
 #' @export
-weightMatrix <- function (nlmom, n) {
+weightMatrix <- function (nLmom, n) {
   
-  if (n < 1) {
-    stop("n must be greater than or equal to 1.")
+  if ( nLmom < 1 ) {
+    
+    stop("nLmom must be greater than or equal to 1.")
+    
   }
   
-  if (nlmom < 1) {
-    stop("nlmom must be greater than or equal to 1.")
+  if ( nLmom > n ) {
+    
+    stop("nLmom must be less than or equal to n.")
+    
   }
   
-  if (nlmom > n) {
-    stop("nlmom must be less than or equal to n.")
-  }
-  
-  res <- sapply(1:nlmom, weightFactors, n = n)
-  colnames(res) <- paste0("W", 1:nlmom)
+  res <- sapply(1:nLmom, weightFactors, n = n)
+  colnames(res) <- paste0("W", 1:nLmom)
   
   res
   

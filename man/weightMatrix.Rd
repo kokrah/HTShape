@@ -4,10 +4,10 @@
 \alias{weightMatrix}
 \title{Weight Coefficients for Sample L-moments.}
 \usage{
-weightMatrix(nlmom, n)
+weightMatrix(nLmom, n)
 }
 \arguments{
-\item{nlmom}{The number of sample l-moments.}
+\item{nLmom}{The number of sample l-moments.}
 
 \item{n}{The sample size.}
 }

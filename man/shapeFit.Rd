@@ -2,14 +2,19 @@
 % Please edit documentation in R/shapeFit.R
 \name{shapeFit}
 \alias{shapeFit}
-\title{This function computes L-skew and L-kurt estimates.}
+\title{Sample L-moments ratios.}
 \usage{
-shapeFit(x = TRUE)
+shapeFit(x, nLmom = 4, samplesByCols = TRUE)
 }
 \arguments{
-\item{x}{Do you love cats :) Defaults to TRUE.}
+\item{x}{data vector / matrix.}
+
+\item{nLmom}{The number of l-moments to compute (Default = 4).}
+
+\item{samplesByCols}{Do columns represent samples ? (Default = TRUE)}
 }
 \description{
-This function computes L-skew and L-kurt estimates.
+This function computes the sample l-moments ratios for a given
+dataset (vector / matrix / data.frame).
 }
 
