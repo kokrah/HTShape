@@ -2,14 +2,14 @@
 % Please edit documentation in R/shapeFit.R
 \name{shapeFit}
 \alias{shapeFit}
-\title{This function computes L-skew and L-kurt estimates}
+\title{This function computes L-skew and L-kurt estimates.}
 \usage{
 shapeFit(x = TRUE)
 }
 \arguments{
-\item{love}{Do you love cats? Defaults to TRUE.}
+\item{x}{Do you love cats :) Defaults to TRUE.}
 }
 \description{
-This function computes L-skew and L-kurt estimates
+This function computes L-skew and L-kurt estimates.
 }
 

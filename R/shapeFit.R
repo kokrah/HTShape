@@ -1,6 +1,6 @@
-#' This function computes L-skew and L-kurt estimates
+#' This function computes L-skew and L-kurt estimates.
 #'
-#' @param love Do you love cats? Defaults to TRUE.
+#' @param x Do you love cats :) Defaults to TRUE.
 #' @export
 shapeFit <- function (x=TRUE) {
   
