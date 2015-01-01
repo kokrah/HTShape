@@ -91,8 +91,16 @@ shapeFit <- function (x, nLmom = 4, samplesByCols = TRUE) {
     
   }
 
+  # 8. Compute L-CV
+  lcv <- lmoms[, 2] / lomoms[, 1]
   
-  # 8. Results
-  list(lrats = lrats, lmoms = lmoms, W = W)
+  if ( nrow(lmoms)==1 ) {
+    # remove defualt name of l2 for lcv when input is a vector.  
+    names(lcv) <- NULL
+    
+  }
+  
+  # 9. Results
+  list(lcv = lcv, lrats = lrats, lmoms = lmoms, W = W)
   
 }
