@@ -9,9 +9,9 @@ shapeFit(x, nLmom = 4, samplesByCols = TRUE)
 \arguments{
 \item{x}{data vector / matrix.}
 
-\item{nLmom}{The number of l-moments to compute (Default = 4).}
+\item{nLmom}{the number of l-moments to compute (Default = 4).}
 
-\item{samplesByCols}{Do columns represent samples ? (Default = TRUE)}
+\item{samplesByCols}{do columns represent samples ? (Default = TRUE)}
 }
 \description{
 This function computes the sample l-moments ratios for a given

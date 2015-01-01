@@ -1,11 +1,20 @@
-#' Find volatile genes.
+#' Compute d-values.
 #' 
-#' @param t3 A vector containing L-skew estimates for each gene.
-#' @param t4 A vector containing L-kurt estimates for each gene.
-#' @param plots Indicating whether to show intermediary plots (Default=FALSE).
-#' @return d-values for each gene.
+#' @param t3 a vector containing L-skew estimates for each gene.
+#' @param t4 a vector containing L-kurt estimates for each gene.
+#' @param plots indicating whether to show intermediary plots (Default=FALSE).
+#' @param span the lowess smoother span
 #' @export
 computeDvals <- function (t3, t4, plots=FALSE, span=0.5) {
+  # 0. Remove any NaNs (genes with constant expression level)
+  nans <- is.nan(t3)
+  
+  if ( any(nans) ) {
+    
+    warning("Removing NaN values!")
+    t3 <- t3[!nans]
+    t4 <- t4[!nans]
+  }
   
   # 1. Adjust L-kurt (t4).
   lowess.fit <- lowess(t3, t4, f=span)

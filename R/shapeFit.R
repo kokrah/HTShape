@@ -3,8 +3,8 @@
 #' This function computes the sample l-moments ratios for a given
 #' dataset (vector / matrix / data.frame).
 #' @param x data vector / matrix.
-#' @param nLmom The number of l-moments to compute (Default = 4).
-#' @param samplesByCols Do columns represent samples ? (Default = TRUE)
+#' @param nLmom the number of l-moments to compute (Default = 4).
+#' @param samplesByCols do columns represent samples ? (Default = TRUE)
 #' @export
 shapeFit <- function (x, nLmom = 4, samplesByCols = TRUE) {
   
@@ -92,7 +92,7 @@ shapeFit <- function (x, nLmom = 4, samplesByCols = TRUE) {
   }
 
   # 8. Compute L-CV
-  lcv <- lmoms[, 2] / lomoms[, 1]
+  lcv <- lmoms[, 2] / lmoms[, 1]
   
   if ( nrow(lmoms)==1 ) {
     # remove defualt name of l2 for lcv when input is a vector.  
