@@ -1,0 +1,544 @@
+%\VignetteIndexEntry{shape: Shape analysis of high-throughput experiments data}
+%\VignetteEngine{knitr::knitr}
+
+\documentclass[a4paper, 10pt]{article}
+\usepackage{url}
+\usepackage{afterpage}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{cite}
+\geometry{hmargin=2.5cm, vmargin=2.5cm}
+\usepackage{graphicx}
+\usepackage{courier}
+\bibliographystyle{unsrt}
+
+\begin{document}
+
+% Define global R and R chunk options.
+<<setup, include = FALSE, echo=FALSE>>=
+# R options
+options(width = 65)
+options(continue=" ")
+options(warn=-1)
+set.seed(42)
+
+# R chunk options.
+require(knitr)
+opts_chunk$set(concordance=TRUE, prompt=TRUE, comment=NA, size="small")
+
+# smoothScatter(rnorm(100), rnorm(100))
+@
+
+\title{{\textbf{\texttt{shape}}: Shape analysis of high-throughput experiments data}}
+
+\author{Kwame Okrah${}^{*}$,  H\'ector Corrada-Bravo \\\\\ 
+        Applied Mathematics, Statistics, and Scientific Computation \\ 
+        Center for Bioinformatics and Computational Biology \\ 
+        University of Maryland, College Park \\\\ 
+        \texttt{${}^{*}$kwame.okrah (at) gmail.com}}
+
+\date{\today}
+
+\maketitle
+
+\begin{abstract}
+\normalsize
+Given a dataset we first try to characterize 
+its central value (location) with the sample 
+mean (or sample median) and its spread around 
+the location (scale) with the sample standard 
+deviation (or sample range).
+When the sample size, $n$, is sufficiently 
+large we can begin to assess the shape of the 
+data in some meaningful way. 
+Distributional shape is often characterized by 
+two features 
+(1) Skewness: a measure of how far the
+shape of the distribution deviates from symmetry
+around its location and 
+(2) Kurtosis: a measure of how much
+weight is at the tails of the distribution relative 
+to the weight around the location. 
+This vignette describes the statistical 
+analysis of the shape (skewness and kurtosis)
+of high-throuput experiments data 
+(eg. RNA-seq, microarry) using the 
+\textbf{\texttt{shape}} package. 
+It also demonstrates the detection of 
+transcripts (eg. genes) within a dataset
+whose sample distribution is markedly different from 
+the majority of transcripts in the same dataset. 
+\end{abstract}
+
+\vspace{1 cm}
+
+\noindent \underline{If you use 
+\textbf{\texttt{shape}} 
+(version \Sexpr{packageVersion("shape")}) 
+in your work, please cite:}
+
+\renewcommand\refname{\vskip -1cm} 
+
+\begin{thebibliography}{9}
+
+\makeatletter
+\renewcommand\@biblabel[1]{\textbullet}
+\makeatother
+
+\bibitem{hosking} J. Hosking. 
+         \emph{L-moments: analysis and estimation 
+               of distributions using linear 
+               combinations of order statistics.}    
+               Journal of the Royal Statistical Society. 
+               Series B (Methodological),
+               \textbf{52}, 105--124, 1990.
+               
+\bibitem{okrah} K. Okrah.
+          \texttt{shape}: Shape analysis of high-throughput 
+          experiments data. 
+          R package version \Sexpr{packageVersion("shape")},
+          2014 (\url{https://github.com/kokrah/shape}).
+          
+\end{thebibliography}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+Before we begin we first give a brief
+description of the theory on which
+our methods are based.
+
+\subsection{A numerical summary of shape}
+
+\noindent Similar to traditional moments,
+the theory of L-moments
+forms the basis of many statistical methods 
+(eg. parameter estimation, hypothesis testing, 
+model selection). However L-moments enjoy 
+many theoretical and practical advantages over
+traditional moments (see \cite{Hosking1990}).
+In this vignette we focus on its ability to
+provide robust statistics that summarize a given 
+dataset.
+The first four L-moments $\lambda_1, \lambda_2, \lambda_3$ 
+and $\lambda_4$ measure location, scale,
+skewness, and kurtosis of data respectively. 
+Unitless measures of relative variation, skewnsess,
+and kurtosis are defined as: 
+L-CV $\tau = \lambda_2 / \lambda_1$, 
+L-skew $\tau_3 = \lambda_3 / \lambda_2$,
+and 
+L-kurt $\tau_4 = \lambda_4 / \lambda_2$
+The L-skew ($\tau_3$) coefficient can take any
+value between (-1, 1); where $\tau_3=0$ implies symmetry
+and $\tau_3 > 0$ ($\tau_3 < 0$) implies skewness to 
+the right (left).\\
+
+\noindent The symmetry-outlier plot (SO-plot) conveniently 
+summarizes the shape of each gene as a point
+on a 2-dimensional plot.
+The interpretation of the L-kurt ($\tau_4$) 
+depends on L-skew (in general one would expect a 
+highly skewed data to have a high kurtosis).
+At $\tau_3 = 0$ and $\tau_4 = 0$ the data has the shape 
+of a uniformly distributed random variable.
+As $\tau_4$ (positive) increases the data becomes bell
+shaped, for example at $\tau_4 = 0.1226$ the data is 
+normally distributed. 
+As $\tau_4$ (negative) decreases the data becomes 
+U-shaped (indicating two possible groups). 
+Please see Figure \ref{interpret} below for details. 
+
+\begin{figure}[!h]
+\centerline{\resizebox{0.78\textwidth}{!}{\includegraphics{interpret.pdf}}}
+\caption{{\bf Interpretation of the SO-plot.}
+       We have shown examples, 
+       based on a sample of size 6, of the 
+       four main types of sample shape
+       (bottom panels) and where they
+       occur on the SO-plot (top panel).
+       Every single point on the SO-plot corresponds
+       to a summary of the shape of a single 
+       transript.
+       The measure of skewness and kurtosis 
+       are not independent, as one would 
+       expect a highly skewed sample would
+       tend to have a high kurtosis.
+       This relationship is indated by 
+       the parabolas on the SO-plot.
+       Starting from below.
+       (1) We have the theoretical lower
+       bound for L-kurt, in terms of L-skew,
+       $\tau_4 = 0.25 (5\tau^2_3 - 1)$.
+       Between the second (2) and third (3)
+       parabolas is a region where the 
+       L-kurt measure is considered moderate.
+       Between the third (3) and fourth (4)
+       parabolas indicate a region where 
+       the L-kurt measure is considered to be high. 
+       Above the fourth curve is considered extreme.}
+\label{interpret}
+\end{figure}
+
+
+\newpage
+
+\section{Pickrell (RNA-seq) dataset}
+
+The Pickrell dataset  \cite{Pickrell2010}
+is part of the International HapMap Project. 
+RNA samples were extracted from
+the lymphoblastoid cell lines of 69 
+unrelated Nigerian individuals, 29 males and 40 females. 
+See \cite{Frazee2011} for details on alignment and counting.  
+The datasets in this package are bundled together 
+in the form of a list. 
+Each component of the list constains the 
+expression measures and its experimental design.
+We will use the Pickrell dataset to illustrate
+the main functions in this package.
+In this example we regard each of the samples
+as replicates. 
+
+<<datasets>>=
+library(shape)
+data(examplesData) # Load datasets.
+@
+
+\subsection{Filter counts and normalize}
+
+First we will filter out genes with low 
+expression by only keeping genes whose
+counts per million (cpm) is more than 1 in 
+at least 29 samples (where 29 is the minimum of
+the 29 male samples and 40 female samples).
+
+<<filterPickrell>>=
+filterCounts <- function (pcounts, thresh, minSamples) {
+  cpm <- t(t(pcounts) /  colSums(pcounts)) * 1e+06
+  keep <- rowSums(cpm > thresh) >= minSamples
+  filteredPcounts <- pcounts[keep, ]
+  filteredPcounts
+}
+
+counts <- examplesData$pickrell$exprs
+gender <- examplesData$pickrell$cond 
+
+pcounts <- counts + 1 # pseudo-counts
+(minSamples <- min(table(gender)))
+dim(pcounts) # Before filteration.
+pcounts <- filterCounts(pcounts, 1, minSamples)
+dim(pcounts) # After filteration. 
+@
+
+\noindent After filteration we normalize for 
+library size and transform the data to 
+log scale. In this vignette we use the DEseq method 
+\cite{Anders2010}, however any of the 
+library size normalization methods will suffice.
+
+<<normalizePickrell>>=
+ref <- exp(rowMeans(log(pcounts)))
+deseqScal <- apply(pcounts / ref, 2, median)
+pcounts <- t(t(pcounts) / deseqScal)
+y <- log2(pcounts)
+@
+
+\subsection{\textbf{\texttt{fitShape()}}: computation of sample shape.}
+
+We are now ready to compute the L-skew $(\tau_3)$ 
+and L-kurt $(\tau_4)$ estimates (ie. shape) of each gene.
+This is done by calling the function \texttt{fitShape()}. 
+
+<<shapePickrell>>=
+# Compute the L-skew (t3) and L-kurt (t4) of each gene.
+res <- fitShape(y) 
+class(res)
+lapply(res, head, n=3)
+@
+
+\subsection{\textbf{\texttt{computeDvals()}}: finding outlier genes.}
+
+Given the shape of each gene in the dataset the 
+function \texttt{computeDvals()} computes the dissimilarity 
+score (d-values) between each gene's shape and the typical gene's
+shape. The d-values range from 0 to 1; where 1 is very close and 
+0 is very far. See paper for details.
+
+<<dvalsPickrell>>=
+# Compute d-values
+t3 <- res$lrats[, "t3"] # Grab L-skew estimates. 
+t4 <- res$lrats[, "t4"] # Grab L-kurt estimates. 
+dvals <- computeDvals(t3, t4)
+@
+
+\noindent In the call to \texttt{computeDvals()} above we have
+used the option \texttt{plot = TRUE} to display a summary of the 
+computation of the d-values.
+
+\subsection{\textbf{\texttt{plotSO()}}: the symmetry outlier plot (SO-plot).}
+
+<<soplotPickrell, fig.width=5, fig.height=3.5, fig.align='center'>>=
+# Symmetry-Outlier plot.
+plotSO(t3, t4, data.name="Pickrell (No Gender Adjustment)")
+
+# Pick volatile / outlier genes.
+sel <- which(dvals < 0.0001) # select 0.01% cutoff
+
+# Seperate outlier genes into 2 groups for illustration purposes
+sel1 <- sel[abs(t3[sel]) > 0.3]
+sel2 <- sel[abs(t3[sel]) <= 0.3]
+points(t3[sel1[1]], t4[sel1[1]], cex=0.5, col="blue")
+points(t3[sel1[2]], t4[sel1[2]], cex=0.5, col="blue")
+points(t3[sel2], t4[sel2], cex=0.5, col="red")
+@
+
+
+\noindent Let us take a closer look at the genes called
+outliers. Keep in mind that outliers here mean that
+the shape of the gene's expression levels across
+all the samples is different from the majority of genes
+in the data (independent of location and scale).
+We seperate the oultier genes into two groups 
+to demostrate how they relate to Figure \ref{interpret}.
+
+<<suby1Pickrell, fig.width=5, fig.height=2.5, fig.align='center'>>=
+par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 1, 0.5))
+
+suby1 <- y[sel2, ]
+suby2 <- y[sel1, ]
+
+# Shift and scale epression levels.
+suby1 <- t(scale(t(suby1), TRUE, TRUE))
+suby2 <- t(scale(t(suby2), TRUE, TRUE))
+
+# Add canvas.
+plot(0, 0, pch="",
+     xlim=c(0.75, nrow(suby1)), ylim=range(suby1), 
+     ylab="Standard Expr. Level", xlab="Genes", 
+     cex.axis=0.7, cex.lab=0.7, xaxt="n")
+axis(1, 1:nrow(suby1), 1:nrow(suby1), cex.axis=0.7)
+abline(h=0, col="gray", lty=3)
+
+# Add color.
+gcol <- ifelse(gender == "female", "black", "red")
+
+for(k in 1:nrow(suby1)){ # Add data points.
+  points(jitter(rep(k, ncol(suby1)), amount=0.2), 
+         suby1[k,], cex=0.35, col=gcol)
+} 
+text(1:nrow(suby1)-0.45, rep(0, nrow(suby1)), 
+     rownames(suby1), srt=90, cex=0.6)
+@
+
+Lets look at group at the second group (suby2).
+
+<<suby2Pickrell, fig.width=2, fig.height=2.5, fig.align='center'>>=
+par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 1, 0.5))
+
+# Add canvas.
+plot(0, 0, pch="", 
+     xlim=c(2, 4.4), ylim=range(suby2),
+     ylab="Standard Expr. Level", xlab="Genes",
+     cex.axis=0.7, cex.lab=0.7, xaxt="n")
+axis(1, c(2.75, 4), c("A", "B"), cex.axis=0.7) 
+abline(h=0, col="gray", lty=3)
+
+for(k in 1:nrow(suby2)){
+  if (k==1) j <- 2.5 else j <- 3.75
+  
+  points(jitter(rep(j, ncol(suby2)), amount=0.2), 
+         suby2[k,], cex=0.35, col=gcol)
+} 
+
+# Add boxplots
+boxplot(t(suby2), at=c(3, 4.25), add=TRUE, 
+        boxwex=0.4, cex=0.5, xlab="", ylab="", 
+        xaxt="n", yaxt="n")
+text(c(2.5, 3.75)-0.4, rep(0, nrow(suby2)), 
+     rownames(suby2), srt=90, cex=0.6)
+@
+
+
+\subsection{Steps in outlier computation}
+\label{outlier}
+
+We know describe how we assign p-values to the genes.
+There are 4 main steps in obtaining outlier genes:
+\begin{enumerate}
+\item Estimate the dependence of t4 on t3 with a lowess fuction.
+      And ajdust the t4 estimates by subtracting the lowess fit.
+\item Model the adjusted t4 estimates and t3 estimates with a bivariate Gaussion.
+      And compute the statistical distance of each point from the center.
+\item From the statistical distance obtain the exceedance probalitiy using
+      a chi-square distribution with 2 degrees of freedom.
+\item Decide on a cutoff.      
+\end{enumerate}
+
+<<volatilePickrell, fig.width=5, fig.height=4, fig.align='center'>>=
+dvals <- computeDvals(t3, t4, plot=TRUE)
+@
+
+
+\newpage
+
+\section{Hammoud (RNA-seq) dataset}
+
+We will use the Hammoud dataset to demontrate the
+SO-plot's ability to detect two group information.
+See type 1 in Figure \ref{interpret}.
+
+<<Hammoud1, fig.width=6, fig.height=3, fig.align='center'>>=
+par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 1, 0.5), mfrow=c(1, 2))
+hammoud <- examplesData$hammoud
+rpkm <- hammoud$exprs
+cond <- hammoud$cond
+
+minSamples <- min(table(cond))
+
+dim(rpkm) # Before filteration.
+rpkm <- filterCounts(rpkm, thresh=1, minSamples=minSamples)
+dim(rpkm) # After filteration.
+
+y <- log2(rpkm + 1)
+
+compute.residuals <- function (exprs, cond) {
+    design <- model.matrix(~0 + as.factor(cond))
+    beta.hat <- solve(t(design) %*% design) %*% t(design) %*% 
+        t(as.matrix(exprs))
+    res <- exprs - t(design %*% beta.hat)
+    as.data.frame(res)
+}
+
+resids <- compute.residuals(y, cond)
+
+res1 <- fitShape(y) # Without adjustment for cell type.
+res2 <- fitShape(resids) # With adjustment for cell type.
+
+# Grab corresponding shape estimates.
+res1.t3 <- res1$lrats[, "t3"]
+res1.t4 <- res1$lrats[, "t4"]
+res2.t3 <- res2$lrats[, "t3"]
+res2.t4 <- res2$lrats[, "t4"]
+
+plotSO(res1.t3, res1.t4, "Hammoud (No adjustment)") 
+plotSO(res2.t3, res2.t4, "Hammoud (Cell type adjusted)")
+@
+
+\subsection{Two group information}
+
+Relationship between fold change and L-kurt.
+
+<<Hammoud2, fig.width=7, fig.height=3, fig.align='center'>>=
+par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 1, 0.5), mfrow=c(1, 2))
+# Compute fold change
+fc <- rowMeans(y[, cond=="Spermatids"]) - rowMeans(y[, !cond=="Spermatids"]) 
+
+# Fold change vs. L-kurt (no adjustment for cell type)
+plot(fc, res1.t4, pch=".", col="gray")
+abline(h=0, lty=3, col="red")
+
+# Fold change vs. L-kurt (adjusted for cell type)
+plot(fc, res2.t4, pch=".", col="gray")
+abline(h=0, lty=2, col="red")
+@
+
+We can see clearly that L-kurt estimates are a 
+function of fold-change. 
+Let us randomly select and plot a few the genes with
+L-kurt estimates less than -0.2.
+
+<<Hammoud3, fig.width=7, fig.height=3, fig.align='center'>>=
+par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 1, 0.5))
+
+mean(sel <- res1.t4 < -0.2) # How many ?
+suby <- y[sample(which(sel), 50), ]
+suby <- t(scale(t(suby), TRUE, TRUE))
+
+matplot(suby, pch=16, cex=0.5,
+        col=ifelse(cond=="Spermatids", "blue", "red"),
+        ylab="Standard Exprs. Level", xlab="75 random genes (t4 < -0.2)")
+abline(v=1:50, h=0, col="gray", lty=3)
+@
+
+\newpage
+
+\section{Bottomly (RNA-seq) dataset}
+
+In some datasets where there is only a small purtabation in the 
+conditions, for example the Bottomly dataset,
+we expect that most genes will have the same shape
+before and after condition adjustment. 
+
+<<bottomly1, fig.width=6, fig.height=3, fig.align='center'>>=
+par(mfrow=c(1, 2))
+bottomly <- examplesData$bottomly
+counts <- bottomly$exprs
+cond <- bottomly$cond
+
+minSamples <- min(table(cond))
+
+dim(counts) # Before filteration.
+counts <- filterCounts(counts, thresh=1, minSamples=minSamples)
+dim(counts)# After filteration.
+
+pcounts <- counts + 1 # Pseudo-counts.
+
+# Normalize.
+ref <- exp(rowMeans(log(pcounts)))
+deseqScal <- apply(pcounts / ref, 2, median)
+pcounts <- t(t(pcounts) / deseqScal)
+y <- log2(pcounts)
+
+resids <- compute.residuals(y, cond)
+
+res1 <- fitShape(y) # Without adjustment for strain type.
+res2 <- fitShape(resids) # With adjustment for strain type.
+
+# Grab corresponding shape estimates.
+res1.t3 <- res1$lrats[, "t3"]
+res1.t4 <- res1$lrats[, "t4"]
+res2.t3 <- res2$lrats[, "t3"]
+res2.t4 <- res2$lrats[, "t4"]
+
+plotSO(res1.t3, res1.t4, "Bottomly (No adjustment)") 
+plotSO(res2.t3, res2.t4, "Bottomly (Strain type adjusted)")
+@
+
+\subsection{Two group information}
+
+As shown below the relationship between fold change and L-kurt
+is non-existent. 
+
+<<bottomly2, fig.width=7, fig.height=3, fig.align='center'>>=
+par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 1, 0.5), mfrow=c(1, 2))
+# Compute fold change
+fc <- rowMeans(y[, cond=="C57BL/6J"]) - rowMeans(y[, !cond=="C57BL/6J"]) 
+# Fold change vs. L-kurt (no adjustment for strain type)
+plot(fc, res1.t4, pch=".", col="gray")
+abline(h=0, lty=2, col="red")
+# Fold change vs. L-kurt (strain type adjusted)
+plot(fc, res2.t4, pch=".", col="gray")
+abline(h=0, lty=2, col="red")
+@
+
+
+\newpage
+
+\section{Session Information}
+
+<< sessionInfo >>=
+sessionInfo()
+@
+
+\newpage
+\bibliography{shape}
+
+\end{document}
+
+
