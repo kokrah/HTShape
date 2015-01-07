@@ -31,13 +31,13 @@ and
 (L-kurt) L4 / L2.
 
 The purpose of this package is to compute
-the shape (L-skew, L-kurt) statistics of each 
+the shape (ie. L-skew and L-kurt) statistics of each 
 transcript (eg. gene) 
 in a high-throughput dataset (eg. RNA-seq, microarry).
 Using these statistics we can find
 genes within a dataset
 whose sample shape is markedly different from 
-the majority of gene in the same dataset. 
+the majority of genes in the same dataset. 
 When put together these shape statistics give an overall
 description of the entire high-throughput dataset.
 
@@ -57,18 +57,18 @@ c. `plotSO()`
 
 * Given a dataset such as a high-throughput expression matrix 
   (or just a vector of measurements) the function `fitShape()`
-  will compute and return the L-CV, L-skew, and L-kurt for each gene.
+  will compute and return the L-CV, L-skew, and L-kurt estimates
+  for each gene.
 
-* Given the L-skew and L-kurt of each gene, the 
-  function `computeDvals()` computes a dissimilarity 
-  score (d-values) between each gene's (L-skew, L-shape) estimate 
-  and the typical gene's (L-skew, L-shape) estimate. 
+* Given the shape (ie. L-skew and L-kurt) estimate of each gene, 
+  the function `computeDvals()` computes a dissimilarity 
+  distance (d-values) between each gene's shape estimate  
+  and the typical gene's shape estimate.
   The d-values range from 0 to 1; where 1 is very close and 
   0 is very far.
 
 * The function `plotSO()` shows 
-  each gene's (L-skew, L-shape) on a single plot (SO-plot). 
-
+  each gene's shape esitmate on a single plot. 
 
 ## Installation
 

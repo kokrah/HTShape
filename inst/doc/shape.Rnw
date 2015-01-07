@@ -208,7 +208,7 @@ the shape statistics of each gene in a high-throughput dataset.
 Using these statistics we can find
 genes within a dataset
 whose sample shape is markedly different from 
-the majority of gene in the same dataset. 
+the majority of genes in the same dataset. 
 When put together these shape statistics give an overall
 description of the entire high-throughput dataset.
 The ability to describe the shape of high-throughput
@@ -227,18 +227,19 @@ package:
 
 \noindent Given a dataset such as a high-throughput expression matrix 
 (or just a vector of measurements) the function \texttt{fitShape()}
-will compute and return the L-CV, L-skew, and L-kurt for each gene.\\
+will compute and return the L-CV, L-skew, and L-kurt estimates 
+for each gene.\\
 
-\noindent Given the L-skew and L-kurt of each gene, the 
-function \texttt{computeDvals()} computes a dissimilarity 
-score (d-values) between each gene's (L-skew, L-shape) estimate 
-and the typical gene's (L-skew, L-shape) estimate. 
+\noindent Given the shape (ie. L-skew and L-kurt) estimate
+of each gene, the function 
+\texttt{computeDvals()} computes a dissimilarity 
+distance (d-values) between each gene's shape estimate
+and the typical gene's shape estimate. 
 The d-values range from 0 to 1; where 1 is very close and 
 0 is very far.\\  
 
 \noindent The function \texttt{plotSO()} shows 
-each gene's (L-skew, L-shape) on a single plot (SO-plot). 
-
+each gene's shape estimate on a single plot (SO-plot). 
 
 \subsection{Vignette overview}
 
