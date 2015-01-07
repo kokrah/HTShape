@@ -6,12 +6,15 @@
 #' @param medianCol color of L-skew and L-kurt median lines (Default = "red")
 #' @param defaultLook determines whether the default appearance of the (L-skew, L-kurt) points
 #' is used (Default=TRUE).
+#' @param verbose indicates whether to printout the L-skew summary (Default = FALSE).
 #' @param ... arguments to control the (L-skew, L-kurt) points if defaultLook = FALSE.
 #' @export
 plotSO <- function(t3, t4,
                    dataName = "Data name",
                    medianCol = "gray90",
-                   defaultLook = TRUE, ...){
+                   defaultLook = TRUE, 
+                   verbose = FALSE, 
+                   ...){
 
   # Make a blank plot
   old.par <- par(mar=c(3.5, 2.5, 1, 0.5))
@@ -133,7 +136,7 @@ plotSO <- function(t3, t4,
                        t3.summary[2], ", ",
                        t3.summary[3], ")")
   
-  if ( TRUE ) {
+  if (verbose) {
   
     print(t3.summary)
     
