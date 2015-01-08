@@ -62,18 +62,18 @@ weight is at the tails of the distribution relative
 to the weight around the location.
 This vignette describes the statistical 
 analysis of the shape (skewness and kurtosis)
-of high-throuput experiments data 
-(eg. RNA-seq, microarry) using the 
+of high-throughput experiments data 
+(e.g. RNA-seq, microarry) using the 
 \textbf{\texttt{shape}} package. 
 It also demonstrates the detection of 
-transcripts (eg. genes) within a dataset
+transcripts (e.g. genes) within a dataset
 whose sample shape is markedly different from 
 the majority of transcripts in the same dataset. 
 The ability to describe the shape of high-throughput
 genomics data is useful for two reasons: 
-1. It enriches the exploratory data analysis step, and
+1. It enriches the exploratory data analysis process, and
 2. It provides a means of checking the distributional 
-assumptions of statisical methods.
+assumptions of statistical methods.
 \end{abstract}
 
 \vspace{1 cm}
@@ -139,7 +139,7 @@ dataset.
 The first four L-moments $\lambda_1, \lambda_2, \lambda_3$ 
 and $\lambda_4$ measure location, variance,
 skewness, and kurtosis of data respectively. 
-Unitless measures of relative variance, skewness,
+Unit free measures of relative variance, skewness,
 and kurtosis are defined as: 
 L-CV $\tau = \lambda_2 / \lambda_1$, 
 L-skew $\tau_3 = \lambda_3 / \lambda_2$,
@@ -215,7 +215,7 @@ The ability to describe the shape of high-throughput
 genomics data is useful for two reasons: 
 1. It enriches the exploratory data analysis step, and
 2. It provides a means of checking the distributional 
-assumptions of statisical methods.\\
+assumptions of statistical methods.\\
 
 \noindent There are three main functions in the \textbf{\texttt{shape}} 
 package:
@@ -230,7 +230,7 @@ package:
 will compute and return the L-CV, L-skew, and L-kurt estimates 
 for each gene.\\
 
-\noindent Given the shape (ie. L-skew and L-kurt) estimate
+\noindent Given the shape (i.e. L-skew and L-kurt) estimate
 of each gene, the function 
 \texttt{computeDvals()} computes a dissimilarity 
 distance (d-values) between each gene's shape estimate
@@ -288,7 +288,7 @@ be used in this vignette :
 
 The datasets in this package are bundled together 
 in the form of a list. 
-Each component of the list constains the 
+Each component of the list contains the 
 expression measures and its experimental design.
 We will use the Pickrell dataset to illustrate
 the main functions in this package.\\
@@ -331,12 +331,12 @@ gender <- examplesData$pickrell$cond
 (tab <- table(gender))
 pcounts <- counts + 1 # pseudo-counts
 minSamples <- min(tab)
-dim(pcounts) # Before filteration.
+dim(pcounts) # Before filtration.
 pcounts <- filterCounts(pcounts, 1, minSamples)
-dim(pcounts) # After filteration. 
+dim(pcounts) # After filtration. 
 @
 
-\noindent After filteration we normalize for 
+\noindent After filtration we normalize for 
 library size and transform the data to 
 $\hbox{log}_2$ scale. In this vignette we use the DEseq method 
 \cite{Anders2010}, however any of the 
@@ -352,7 +352,7 @@ y <- log2(pcounts)
 \subsection{\textbf{\texttt{fitShape()}}: computation of sample shape}
 
 We are now ready to compute the L-skew $(\tau_3)$ 
-and L-kurt $(\tau_4)$ estimates (ie. shape) of each gene.
+and L-kurt $(\tau_4)$ estimates (i.e. shape) of each gene.
 This is done by calling the function \texttt{fitShape()}. 
 
 <<shapePickrell>>=
@@ -382,9 +382,9 @@ dvals <- computeDvals(t3, t4)
 We now construct the SO-plot. On the SO-plot
 we highlight genes that have very low ($< 10^{-4}$) d-values
 (aka. outlier genes).
-This criterion is abitrary and is at the users discretion.
+This criterion is arbitrary and is at the users discretion.
 For illustrative reasons we separate the outlier genes into 
-two gorups; those with the extreme skew (blueGroup) from the
+two groups; those with the extreme skew (blueGroup) from the
 rest (redGroup).
 
 <<soplotPickrell, fig.width=5, fig.height=3.5, fig.align='center'>>=
@@ -573,10 +573,10 @@ this data as \texttt{resids}.\\
 <<filterGenesHammoud, echo=FALSE>>=
 minSamples <- min(tab)
 
-# dim(rpkm) # Before filteration.
+# dim(rpkm) # Before filtration.
 keep <- rowSums(rpkm > 1) >= minSamples
 rpkm <- rpkm[keep, ]  
-# dim(rpkm) # After filteration.
+# dim(rpkm) # After filtration.
 
 log2RPKM <- log2(rpkm + 1)
 
@@ -607,7 +607,7 @@ plotSO(res2$lrats[, "t3"], res2$lrats[, "t4"],
 \noindent These two SO-plots are very different. 
 The unadjusted SO-plot has the bulk of its genes below 
 $\tau_4 = 0$ and concentrated at $\tau_3=0$ (symmetry). 
-This suggets that a lot of genes
+This suggests that a lot of genes
 are differentially expressed across the cell type.
 Let us investigate further by exploring the 
 relationship between L-kurt and log fold change.
@@ -716,9 +716,9 @@ this data as \texttt{resids}.\\
 <<filterGenesBottomly, echo=FALSE>>=
 minSamples <- min(tab)
 
-# dim(counts) # Before filteration.
+# dim(counts) # Before filtration.
 counts <- filterCounts(counts, thresh=1, minSamples=minSamples)
-# dim(counts)# After filteration.
+# dim(counts)# After filtration.
 
 pcounts <- counts + 1 # Pseudo-counts.
 
@@ -746,7 +746,7 @@ plotSO(res2$lrats[, "t3"], res2$lrats[, "t4"],
 
 \noindent These two SO-plots are very similar. 
 This suggests that most genes are not differentially expressed.
-Let us investige further by exploring the 
+Let us investigate further by exploring the 
 relationship between L-kurt and log fold change.
 
 <<bottomly2, fig.width=7, fig.height=3, fig.align='center', echo=FALSE>>=
@@ -772,7 +772,7 @@ abline(h=0, lty=2, col="red")
 @
 
 \noindent Only a few genes change L-kurt estimates
-after we a adjust for strain.
+after we adjust for strain.
 
 \section{Summary and discussion}
 

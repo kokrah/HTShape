@@ -30,9 +30,9 @@ gender <- examplesData$pickrell$cond
 (tab <- table(gender))
 pcounts <- counts + 1 # pseudo-counts
 minSamples <- min(tab)
-dim(pcounts) # Before filteration.
+dim(pcounts) # Before filtration.
 pcounts <- filterCounts(pcounts, 1, minSamples)
-dim(pcounts) # After filteration. 
+dim(pcounts) # After filtration. 
 
 ## ----normalizePickrell-----------------------------------------
 ref <- exp(rowMeans(log(pcounts)))
@@ -133,10 +133,10 @@ cond <- hammoud$cond
 ## ----filterGenesHammoud, echo=FALSE----------------------------
 minSamples <- min(tab)
 
-# dim(rpkm) # Before filteration.
+# dim(rpkm) # Before filtration.
 keep <- rowSums(rpkm > 1) >= minSamples
 rpkm <- rpkm[keep, ]  
-# dim(rpkm) # After filteration.
+# dim(rpkm) # After filtration.
 
 log2RPKM <- log2(rpkm + 1)
 
@@ -219,9 +219,9 @@ cond <- bottomly$cond
 ## ----filterGenesBottomly, echo=FALSE---------------------------
 minSamples <- min(tab)
 
-# dim(counts) # Before filteration.
+# dim(counts) # Before filtration.
 counts <- filterCounts(counts, thresh=1, minSamples=minSamples)
-# dim(counts)# After filteration.
+# dim(counts)# After filtration.
 
 pcounts <- counts + 1 # Pseudo-counts.
 

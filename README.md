@@ -23,7 +23,7 @@ dataset.
 The first four L-moments L1, L2, L3 
 and L4 measure location, variance,
 skewness, and kurtosis of data respectively. 
-Unitless measures of relative variance, skewness,
+Unit free measures of relative variance, skewness,
 and kurtosis are defined as: 
 (L-CV) L2 / L1, 
 (L-skew) L3 / L2,
@@ -31,9 +31,9 @@ and
 (L-kurt) L4 / L2.
 
 The purpose of this package is to compute
-the shape (ie. L-skew and L-kurt) statistics of each 
-transcript (eg. gene) 
-in a high-throughput dataset (eg. RNA-seq, microarry).
+the shape (i.e. L-skew and L-kurt) statistics of each 
+transcript (e.g. gene) 
+in a high-throughput dataset (e.g. RNA-seq, microarry).
 Using these statistics we can find
 genes within a dataset
 whose sample shape is markedly different from 
@@ -60,7 +60,7 @@ c. `plotSO()`
   will compute and return the L-CV, L-skew, and L-kurt estimates
   for each gene.
 
-* Given the shape (ie. L-skew and L-kurt) estimate of each gene, 
+* Given the shape (i.e. L-skew and L-kurt) estimate of each gene, 
   the function `computeDvals()` computes a dissimilarity 
   distance (d-values) between each gene's shape estimate  
   and the typical gene's shape estimate.
