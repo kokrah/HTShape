@@ -1,4 +1,4 @@
-shape: Shape analysis of high-throughput experiments data.
+HTShape: Shape analysis of high-throughput experiments data.
 ==========================================================
 
 Distributional shape is often characterized by 
@@ -77,11 +77,11 @@ version of shape from Github:
 
 ```r
 require(devtools)
-install_github("kokrah/shape")
+install_github("kokrah/HTShape")
 ```
 
 If all went well you should now be able to load shape:
 ```r
-require(shape)
-vignette("shape")
+require(HTShape)
+vignette("HTShape")
 ```
