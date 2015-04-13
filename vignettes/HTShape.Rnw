@@ -30,7 +30,7 @@ opts_chunk$set(concordance=TRUE, prompt=TRUE, comment=NA, size="small")
 # smoothScatter(rnorm(100), rnorm(100))
 @
 
-\title{{\textbf{\texttt{HTshape}}: Shape analysis of high-throughput experiments data}}
+\title{{\textbf{\texttt{HTShape}}: Shape analysis of high-throughput experiments data}}
 
 \author{Kwame Okrah${}^{*}$,  H\'ector Corrada-Bravo \\\\\ 
         Applied Mathematics, Statistics, and Scientific Computation \\ 

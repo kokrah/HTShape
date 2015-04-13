@@ -3,3 +3,4 @@
 export(computeDvals)
 export(fitShape)
 export(plotSO)
+export(shapeManova)
