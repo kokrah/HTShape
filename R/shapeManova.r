@@ -55,7 +55,7 @@ shapeManova = function (exprs, groups, plot=TRUE, groupCol=NULL) {
       
     }else{
       
-      plot(Y, pch=19, ylab="L-kurt", xlab="L=skew", cex=0.8, col=groupCol,
+      plot(Y, pch=19, ylab="L-kurt", xlab="L-skew", cex=0.8, col=groupCol,
            main=paste0("Shape Manova (Wilk's P-value: ", format(round(pval, 4), nsmall=4), ")"))
       
       legend("topleft", legend=uGroups, fill=unique(groupCol))

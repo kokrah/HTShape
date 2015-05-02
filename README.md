@@ -47,13 +47,15 @@ genomics data is useful for two reasons:
 2. It provides a means of checking the distributional 
 assumptions of statisical methods.
 
-There are three main functions in this package:
+There are four main functions in this package:
 
 a. `fitShape()`
 
 b. `computeDvals()`
 
 c. `plotSO()`
+
+d. `shapeManova()`
 
 * Given a dataset such as a high-throughput expression matrix 
   (or just a vector of measurements) the function `fitShape()`
@@ -69,6 +71,12 @@ c. `plotSO()`
 
 * The function `plotSO()` shows 
   each gene's shape esitmate on a single plot. 
+
+* The function `shapeManova()` summarizes the shape,
+  (i.e. L-skew and L-kurt) estimate, of each sample 
+  (column in expression matrix) and perfoms a one-way
+  multivariate anova (MANOVA) to test whether sample shapes 
+  are different across biological groups.
 
 ## Installation
 

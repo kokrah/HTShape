@@ -2,5 +2,6 @@
 
 export(computeDvals)
 export(fitShape)
+export(lweights)
 export(plotSO)
 export(shapeManova)
