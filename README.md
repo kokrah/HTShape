@@ -3,10 +3,10 @@ HTShape: Shape analysis of high-throughput experiments data.
 
 Distributional shape is often characterized by 
 two features 
-(1) Skewness: a measure of how far the
+(1) skewness: a measure of how far the
 shape of the distribution deviates from symmetry
 around its location and 
-(2) Kurtosis: a measure of how much
+(2) kurtosis: a measure of how much
 weight is at the tails of the distribution relative 
 to the weight around the location.
 
@@ -17,9 +17,10 @@ such as parameter estimation, hypothesis testing,
 and model selection. However, L-moments enjoy 
 many theoretical and practical advantages over
 traditional moments.
-In this package we focus on its ability to
-provide robust statistics that summarize a given 
-dataset.
+In this package we use L-moments ratios to
+provide robust summaries of the shape of high-throughput
+genomics data.
+
 The first four L-moments L1, L2, L3 
 and L4 measure location, variance,
 skewness, and kurtosis of data respectively. 
@@ -32,20 +33,18 @@ and
 
 The purpose of this package is to compute
 the shape (i.e. L-skew and L-kurt) statistics of each 
-transcript (e.g. gene) 
+transcript (e.g. gene) or sample
 in a high-throughput dataset (e.g. RNA-seq, microarry).
-Using these statistics we can find
-genes within a dataset
-whose sample shape is markedly different from 
-the majority of genes in the same dataset. 
 When put together these shape statistics give an overall
 description of the entire high-throughput dataset.
 
 The ability to describe the shape of high-throughput
 genomics data is useful for two reasons: 
-1. It enriches the exploratory data analysis process, and
-2. It provides a means of checking the distributional 
-assumptions of statisical methods.
+1. It provides a universal means of checking the distributional 
+assumptions of statisical methods,
+2. It provides a means for finding outlier genes, and
+3. It provides a means for testing whether the empirical distribution
+of samples differ across biological conditions.
 
 There are four main functions in this package:
 
