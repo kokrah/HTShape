@@ -4,16 +4,18 @@
 \alias{shapeManova}
 \title{Perform Manova on shape (t3, t4) of samples (Wilk's Exact Manova).}
 \usage{
-shapeManova(exprs, groups, plot = TRUE, groupCol = NULL)
+shapeManova(sfit, groups, plot = FALSE, loc.scal = FALSE, groupCol = NULL)
 }
 \arguments{
+\item{sfit}{sfit}
+
 \item{groups}{a character vector indicating sample group membership.}
 
 \item{plot}{plot L-skew and L-kurt estimates}
 
-\item{groupCol}{col for each sample}
+\item{loc.scal}{loc.scal}
 
-\item{lrats}{a (2 by number of samples) matrix containing (t3, t3) for each sample.}
+\item{groupCol}{col for each sample}
 }
 \description{
 Perform Manova on shape (t3, t4) of samples (Wilk's Exact Manova).

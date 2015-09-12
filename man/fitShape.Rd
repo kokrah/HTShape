@@ -4,7 +4,7 @@
 \alias{fitShape}
 \title{Sample L-moments ratios.}
 \usage{
-fitShape(x, nLmom = 4, samplesByCols = TRUE)
+fitShape(x, nLmom = 4)
 }
 \arguments{
 \item{x}{data vector / matrix.}
