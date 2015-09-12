@@ -6,101 +6,32 @@
 #' @param nLmom the number of l-moments to compute (Default = 4).
 #' @param samplesByCols do columns represent samples ? (Default = TRUE)
 #' @export
-fitShape <- function (x, nLmom = 4, samplesByCols = TRUE) {
-  
-  # 1. If x is a vector transform it to a single column matrix
-  if ( is.vector(x) ) {
-    
-    x <- as.matrix(x) # the rows are the samples
-    
-  }else{
-    
-    if ( samplesByCols ) {
-      x <- t(x) # put genes in the colums and samples in the rows  
-    }
-    
-  }
-  
-  # 2. Check for NAs (Replace NAs with median)
-  xNA <- is.na(x)
-  
-  if ( any(xNA) ) {
-    
-    warning("Replacing NA values with median!")
-    
-    # A. How many NAs are in each column
-    numberOfNAs <- colSums(xNA)
-    
-    # B. Grab columns that contain NAs
-    naCols <- numberOfNAs > 0
-    
-    # C. Compute the median of column(s) that contain NAs 
-    xSub <- x[, naCols] # xSub is vector if only 1 column contains NAs
-    xSub <- as.matrix(xSub) # make xSub a column matrix in case it is a vector
-        
-    # D. Replace NAs with column medians 
-    colMedians <- apply(xSub, 2, median, na.rm=TRUE)
-    x[xNA] <- rep(colMedians, numberOfNAs[naCols])
-  
-  }
-  
-  # 4. Compute weight matrix
-  n <- nrow(x) 
-  W <- weightMatrix(nLmom, n)
-  
-  # 5. Compute L-moments
-  xs <- apply(x, 2, sort)
-  lmoms <- (t(W) %*% xs) / n
-  lmoms <- t(lmoms)
-  colnames(lmoms) <- paste0("l", 1:nLmom)
-  
-  # 6. Modify results for identical columns genes
-  id <- lmoms[, 2] < .Machine$double.eps ^ 0.5
-  
-  if ( any(id) ) {
-    
-    if ( samplesByCols ) {
-      
-      warning(paste0(sum(id), " out of ", length(id), " row(s) are identical!"))
-      
-    }else{
-      
-      warning(paste0(sum(id), " out of ", length(id), " column(s) are identical!"))
-      
-    }
-    
-    lmoms[id, 2:nLmom] <- 0
-  }
-  
-  # 7. Compute L-ratios if nLmom > 2
-  if ( nLmom > 2 ) {
-    
-    lrats <- lmoms[, 3:nLmom] / lmoms[, 2]
-        
-    if ( is.vector(lrats) ) {
-      
-      lrats <- matrix(lrats, nrow = 1)
-      
-    }
-    
-    colnames(lrats) <- paste0("t", 3:nLmom)
+fitShape <- function (x, nLmom=4) {
 
+  if (nLmom < 2) {
+    stop("nLmom must be 2+ (K. Okrah)")
+  }
+  
+  # Compute L-moments
+  lmoms = Lmoments::Lmoments(x, rmax=nLmom)
+  colnames(lmoms) = paste0("Lmom-", 1:nLmom)
+  rownames(lmoms) = colnames(x)
+  
+  # Compute L-ratios
+  lrats = lmoms / lmoms[, "Lmom-2"]
+  colnames(lrats) = paste0("Lrat-", 1:nLmom)     
+  
+  # Compute L-CV
+  lcv <- 1 / lrats[, "Lrat-1"]
+  names(lcv) = rownames(lrats)
+  
+  if (nLmom == 2) {
+    lrats = NULL
   }else{
-    
-    lrats <- NULL
-    
-  }
-
-  # 8. Compute L-CV
-  lcv <- lmoms[, 2] / lmoms[, 1]
-  
-  if ( nrow(lmoms)==1 ) {
-    # remove defualt name of l2 for lcv when input is a vector.  
-    names(lcv) <- NULL
-    
+    lrats = t(lrats)[-(1:2),]
   }
   
-  # 9. Results
-  list(lcv = lcv, lrats = lrats, lmoms = lmoms)
+  # Results
+  list(lcv = lcv, lrats = lrats, lmoms = t(lmoms))
   
 }

@@ -1,13 +1,18 @@
 #' Perform Manova on shape (t3, t4) of samples (Wilk's Exact Manova).
 #' 
-#' @param lrats a (2 by number of samples) matrix containing (t3, t3) for each sample.
+#' @param sfit sfit
 #' @param groups a character vector indicating sample group membership.
 #' @param plot plot L-skew and L-kurt estimates
 #' @param groupCol col for each sample
+#' @param loc.scal loc.scal
 #' @export
-shapeManova = function (exprs, groups, plot=TRUE, groupCol=NULL) {
+shapeManova = function (sfit, groups, plot=FALSE, loc.scal=FALSE, groupCol=NULL) {
   
-  Y = fitShape(t(exprs))$lrats
+  if (loc.scal) {
+    Y = t(sfit$lrats)
+  }else{
+    Y = t(sfit$lmoms)
+  }
   
   # Make design matrix
   uGroups = unique(groups)
@@ -43,25 +48,7 @@ shapeManova = function (exprs, groups, plot=TRUE, groupCol=NULL) {
   if (plot) {
     
     oldpar = par(mar=c(4, 4, 1.5, 0.5))
-    
-    if (is.null(groupCol)) {
-      
-      pch = 0:(length(uGroups) - 1) + 6     
-      
-      plot(Y, pch=pch, ylab="L-kurt", xlab="L=skew",
-           main=paste0("Shape Manova (Wilk's P-value: ", format(round(pval, 4), nsmall=4), ")"))
-      
-      legend("topleft", legend=uGroups, pch=pch)
-      
-    }else{
-      
-      plot(Y, pch=19, ylab="L-kurt", xlab="L-skew", cex=0.8, col=groupCol,
-           main=paste0("Shape Manova (Wilk's P-value: ", format(round(pval, 4), nsmall=4), ")"))
-      
-      legend("topleft", legend=uGroups, fill=unique(groupCol))
-      
-    }
-    
+    plot(0, 0)
     par(oldpar)
 
   }

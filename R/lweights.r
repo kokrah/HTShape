@@ -7,16 +7,15 @@
 #' @export
 lweights = function (exprs, groups, span=0.5, plot=FALSE) {
   
-  uGroups = unique(groups)
+  # Compute residuals
+  Y = exprs
+  X = model.matrix(~ groups)
+  B = solve(t(X) %*% X) %*% t(X) %*% t(Y)
+  Yhat = t(X %*% B)
+  resids = Y - Yhat
   
-  l2 = c()
-  
-  for (g in uGroups) {
-    l2 = cbind(l2, fitShape(exprs[,g==groups], 2)$lmoms[, "l2"])
-  }
-  
-  y = rowMeans(l2)
-  x = rowMeans(exprs)
+  x = rowMeans(Y)
+  y = fitShape(resids, 2)$lmoms["Lmom-2", ]
   
   l = lowess(x, y, f=span)
   f = approxfun(l, rule=2)
@@ -25,7 +24,7 @@ lweights = function (exprs, groups, span=0.5, plot=FALSE) {
     
     oldpar = par(mar=c(4, 4, 1.5, 0.5))
     
-    plot(x, y, pch=".", col="gray", xlab="Average expression", ylab="L-scale",
+    plot(x, y, pch=".", col="gray40", xlab="Average expression", ylab="L-scale of residuals",
          main="L-scale weights")
     
     points(x, f(x), pch=".", col="red")
