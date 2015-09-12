@@ -83,6 +83,7 @@ Use [devtools](https://github.com/hadley/devtools) to install the latest
 version of shape from Github:
 
 ```r
+install.packages("Lmoments")
 require(devtools)
 install_github("kokrah/HTShape")
 ```
