@@ -15,7 +15,7 @@ lweights = function (exprs, groups, span=0.5, plot=FALSE) {
   resids = Y - Yhat
   
   x = rowMeans(Y)
-  y = fitShape(resids, 2)$lmoms["Lmom-2", ]
+  y = fitShape(resids, 2)$lmoms["L2", ]
   
   l = lowess(x, y, f=span)
   f = approxfun(l, rule=2)

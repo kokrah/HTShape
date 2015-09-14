@@ -14,15 +14,15 @@ fitShape <- function (x, nLmom=4) {
   
   # Compute L-moments
   lmoms = Lmoments(x, rmax=nLmom)
-  colnames(lmoms) = paste0("Lmom-", 1:nLmom)
+  colnames(lmoms) = paste0("L", 1:nLmom)
   rownames(lmoms) = colnames(x)
   
   # Compute L-ratios
-  lrats = lmoms / lmoms[, "Lmom-2"]
-  colnames(lrats) = paste0("Lrat-", 1:nLmom)     
+  lrats = lmoms / lmoms[, "L2"]
+  colnames(lrats) = paste0("LR", 1:nLmom)     
   
   # Compute L-CV
-  lcv <- 1 / lrats[, "Lrat-1"]
+  lcv <- 1 / lrats[, "LR1"]
   names(lcv) = rownames(lrats)
   
   if (nLmom == 2) {

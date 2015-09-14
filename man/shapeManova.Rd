@@ -4,14 +4,21 @@
 \alias{shapeManova}
 \title{Perform Manova on shape (t3, t4) of samples (Wilk's Exact Manova).}
 \usage{
-shapeManova(sfit, groups, nPerm = 500)
+shapeManova(data, groups, nPerm = 500, lrats = FALSE, plot = FALSE,
+  groupCol = NULL)
 }
 \arguments{
-\item{sfit}{output from fitShape()}
-
 \item{groups}{a character vector indicating sample group membership}
 
 \item{nPerm}{number of permutations for non-parametric test}
+
+\item{lrats}{lrats}
+
+\item{plot}{plot}
+
+\item{groupCol}{group color}
+
+\item{sfit}{output from fitShape()}
 }
 \description{
 Perform Manova on shape (t3, t4) of samples (Wilk's Exact Manova).

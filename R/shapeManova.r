@@ -3,9 +3,19 @@
 #' @param sfit output from fitShape()
 #' @param groups a character vector indicating sample group membership
 #' @param nPerm number of permutations for non-parametric test 
+#' @param plot plot
+#' @param lrats lrats
+#' @param groupCol group color
 #' @export
-shapeManova = function (sfit, groups, nPerm=500) {
-  Y = t(sfit$lmoms)
+shapeManova = function (data, groups, nPerm=500, lrats=FALSE, plot=FALSE, groupCol=NULL) {
+  
+  sfit = fitShape(data, nLmom=4)
+  
+  if (lrats) {
+    Y = t(sfit$lrats)  
+  }else{
+    Y = t(sfit$lmoms)
+  }
   
   # Make design matrix
   X = model.matrix(~ 0 + factor(groups))
@@ -61,6 +71,22 @@ shapeManova = function (sfit, groups, nPerm=500) {
   randFstat = ((n - g - 1) / (g - 1)) * ((1 - sqrt(randWL)) / sqrt(randWL))
   
   # Compute p-value
-  mean(randFstat > Fstat)
+  pval = mean(randFstat > Fstat)
+  
+  if (plot) {
+  
+    pal = colorRampPalette(c("red", "orange", "white", "steelblue3", "navy"))(n=99)
+    
+    main = paste0("Shape Manova (nPerm=", nPerm,")\n P-value = ", round(pval, 3))
+    
+    gplots::heatmap.2(t(Y), trace="none", Rowv=F, Colv=F, dendrogram="none", col=pal,
+                      ColSideColors=groupCol, density.info="none", scale="row",
+                      colsep=cumsum(table(groups)), main=main)
+    
+    legend("bottomleft", legend=unique(groups), pch=19, col=unique(groupCol), 
+           title="Groups")
+  }
+  
+  pval
 }
 
