@@ -13,7 +13,7 @@ fitShape <- function (x, nLmom=4) {
   }
   
   # Compute L-moments
-  lmoms = Lmoments::Lmoments(x, rmax=nLmom)
+  lmoms = Lmoments(x, rmax=nLmom)
   colnames(lmoms) = paste0("Lmom-", 1:nLmom)
   rownames(lmoms) = colnames(x)
   

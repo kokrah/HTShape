@@ -10,6 +10,6 @@ Description: This package provides a statistical method
 Suggests: 
   knitr   
 VignetteBuilder: knitr 
-Depends: Lmoments
+Depends:
 License: Artistic-2.0
 LazyData: true
