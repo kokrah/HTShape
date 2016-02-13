@@ -7,9 +7,10 @@ Description: This package provides a statistical method
     for assessing the shape (skewness and kurtosis) of
     gene expression measurements obtained from
     high-throughput genomic experiments.
-Suggests: 
-  knitr   
-VignetteBuilder: knitr 
+Suggests:
+    knitr
+VignetteBuilder: knitr
 Depends:
 License: Artistic-2.0
 LazyData: true
+RoxygenNote: 5.0.1

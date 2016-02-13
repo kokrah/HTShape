@@ -7,7 +7,6 @@
 #' @param group.col group.col
 #' @param ... arguments passed to boxplots
 #' @export
-#' 
 boxplotSLM = function(data, groups, data.name=NULL, show.points=TRUE, group.col=NULL, ...) {
   fit = fitShape(data)
   LM = fit$lmoms  

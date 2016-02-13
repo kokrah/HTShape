@@ -809,7 +809,7 @@ legend("topright", legend=c("C57BL/6J", "DBA/2J"),
        col=c("black", "red"), pch=19, cex=0.8)
 @
 
-<<shapeManova4, fig.width=7, fig.height=3, fig.align='center'>>=
+<<shapeManova4, fig.width=7, fig.height=4, fig.align='center'>>=
 table(cond)
 boxplotSLM(data=log2(counts+1), groups=cond, data.name="Bottomly", 
            group.col=rep(c("black", "red"), table(cond)))
