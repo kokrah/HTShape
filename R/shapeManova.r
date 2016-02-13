@@ -87,7 +87,10 @@ shapeManova = function (data, groups, nPerm=500, lrats=FALSE, plot=FALSE, groupC
            title="Groups")
   }
   
-  list(pvals = apply(Y, 2, function(x) summary(aov(x ~ groups))[[1]][1,"Pr(>F)"]),
-       manova.pval = pval)
+  pvals = apply(Y, 2, function(x) summary(aov(x ~ groups))[[1]][1,"Pr(>F)"])
+  pvals = p.adjust(pvals, method="bonferroni")
+  
+  list(apvals = round(pvals,3), manova.pval = round(pval, 3))
+  
 }
 

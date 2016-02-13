@@ -32,11 +32,12 @@ opts_chunk$set(concordance=TRUE, prompt=TRUE, comment=NA, size="small")
 
 \title{{\textbf{\texttt{HTShape}}: Shape analysis of high-throughput experiments data}}
 
-\author{Kwame Okrah${}^{*}$,  H\'ector Corrada-Bravo \\\\\ 
-        Applied Mathematics, Statistics, and Scientific Computation \\ 
-        Center for Bioinformatics and Computational Biology \\ 
-        University of Maryland, College Park \\\\ 
-        \texttt{${}^{*}$kwame.okrah (at) gmail.com}}
+\author{${}^{*}$${}^{1}$Kwame Okrah,  ${}^{2}$H\'ector Corrada-Bravo \\\\\ 
+        ${}^{1}$Department of Biostatistics, Genentech\\
+        San Francisco, CA \\\\ 
+        ${}^{2}$Center for Bioinformatics and Computational Biology \\ 
+        University of Maryland, College Park, MD \\\\
+        \texttt{${}^{*}$okrah.kwame (at) gene.com}}
 
 \date{\today}
 
@@ -797,7 +798,8 @@ fitShape(log2(counts+1)[,1:5]) # counts equals raw counts
 \noindent Based on these statistics we can test whether the sample distributions
 differ across biological groups. The shapeManova function tests this
 hypothesis by performing a multivariate anova (manova) on the first four L-moments. 
-It also provides single anova p-values for each L-moment separately.
+It also provides single anova p-values for each L-moment separately
+(adjusted for multiplicity using Bonferroni's method).
 
 <<shapeManova3, fig.width=7, fig.height=3, fig.align='center', echo=FALSE>>=
 par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 2, 0.5))
