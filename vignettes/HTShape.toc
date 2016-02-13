@@ -1,0 +1,17 @@
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}
+\contentsline {subsection}{\numberline {1.1}A numerical summary of shape}{3}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Package overview}{4}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Vignette overview}{4}{subsection.1.3}
+\contentsline {section}{\numberline {2}The Pickrell dataset}{5}{section.2}
+\contentsline {subsection}{\numberline {2.1}Filter counts and normalize}{5}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}\textbf {\texttt {fitShape()}}: computation of sample shape}{6}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}\textbf {\texttt {computeDvals()}}: finding outlier genes}{6}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}\textbf {\texttt {plotSO()}}: the symmetry outlier plot (SO-plot)}{6}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Steps in outlier computation}{8}{subsection.2.5}
+\contentsline {section}{\numberline {3}The Hammoud dataset}{9}{section.3}
+\contentsline {subsection}{\numberline {3.1}SO-plot: with and without cell type adjustment}{9}{subsection.3.1}
+\contentsline {section}{\numberline {4}The Bottomly dataset}{11}{section.4}
+\contentsline {subsection}{\numberline {4.1}SO-plot: with and without strain type adjustment}{11}{subsection.4.1}
+\contentsline {section}{\numberline {5}Shape manova}{12}{section.5}
+\contentsline {section}{\numberline {6}Summary and discussion}{13}{section.6}
+\contentsline {section}{\numberline {7}Session Information}{13}{section.7}

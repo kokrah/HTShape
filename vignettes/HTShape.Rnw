@@ -80,7 +80,7 @@ assumptions of statistical methods.
 
 \noindent \underline{If you use 
 \textbf{\texttt{HTShape}} 
-(version \Sexpr{packageVersion("shape")}) 
+(version \Sexpr{packageVersion("HTShape")}) 
 in your work, please cite:}
 
 \renewcommand\refname{\vskip -1cm} 
@@ -357,9 +357,9 @@ This is done by calling the function \texttt{fitShape()}.
 
 <<shapePickrell>>=
 # Compute the L-skew (t3) and L-kurt (t4) of each gene.
-res <- fitShape(y) 
+res <- fitShape(t(y)) 
 class(res)
-lapply(res, head, n=3)
+names(res)
 @
 
 \subsection{\textbf{\texttt{computeDvals()}}: finding outlier genes}
@@ -372,8 +372,8 @@ shape. The d-values range from 0 to 1; where 1 is very close and
 
 <<dvalsPickrell>>=
 # Compute d-values
-t3 <- res$lrats[, "t3"] # Grab L-skew estimates. 
-t4 <- res$lrats[, "t4"] # Grab L-kurt estimates. 
+t3 <- res$lrats["LR3",] # Grab L-skew estimates. 
+t4 <- res$lrats["LR4",] # Grab L-kurt estimates. 
 dvals <- computeDvals(t3, t4)
 @
 
@@ -595,12 +595,12 @@ resids <- compute.residuals(log2RPKM, cond)
 <<Hammoud1, fig.width=7, fig.height=3, fig.align='center'>>=
 par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 1, 0.5), mfrow=c(1, 2))
 
-res1 <- fitShape(log2RPKM) # Without adjustment for cell type.
-res2 <- fitShape(resids) # With adjustment for cell type.
+res1 <- fitShape(t(log2RPKM)) # Without adjustment for cell type.
+res2 <- fitShape(t(resids)) # With adjustment for cell type.
 
-plotSO(res1$lrats[, "t3"], res1$lrats[, "t4"], 
+plotSO(res1$lrats["LR3",], res1$lrats["LR4",], 
        dataName = "Hammoud (No adjustment)") 
-plotSO(res2$lrats[, "t3"], res2$lrats[, "t4"], 
+plotSO(res2$lrats["LR3",], res2$lrats["LR4",], 
        dataName="Hammoud (Cell type adjusted)")       
 @
 
@@ -620,15 +620,15 @@ aveSpermatocytes <- rowMeans(log2RPKM[, cond=="Spermatocytes"])
 lfc <-  aveSpermatids - aveSpermatocytes
 
 # Fold change vs. L-kurt (no adjustment for cell type)
-rang <- range(c(res1$lrats[, "t4"], res2$lrats[, "t4"]))
+rang <- range(c(res1$lrats["LR4",], res2$lrats["LR4",]))
 
-plot(lfc, res1$lrats[, "t4"], pch=".", col="gray",
+plot(lfc, res1$lrats["LR4",], pch=".", col="gray",
      ylab="L-kurt", xlab="log2 fold change",
      main="No adjustment", ylim=rang)
 abline(h=0, lty=2, col="red")
 
 # Fold change vs. L-kurt (adjusted for cell type)
-plot(lfc, res2$lrats[, "t4"], pch=".", col="gray",
+plot(lfc, res2$lrats["LR4",], pch=".", col="gray",
      ylab="L-kurt", xlab="log2 fold change",
      main="Resids", ylim=rang)
 abline(h=0, lty=2, col="red")
@@ -647,7 +647,7 @@ the spermatocyte samples are colored red.
 set.seed(999)
 par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 1, 0.5))
 
-sel <- res1$lrats[, "t4"] < -0.2 # How many ?
+sel <- res1$lrats["LR4",] < -0.2 # How many ?
 subLog2RPKM <- log2RPKM[sample(which(sel), 100), ]
 subLog2RPKM <- t(scale(t(subLog2RPKM), TRUE, TRUE))
 
@@ -735,12 +735,12 @@ resids <- compute.residuals(log2pcounts, cond)
 <<Bottomly1, fig.width=7, fig.height=3, fig.align='center'>>=
 par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 1, 0.5), mfrow=c(1, 2))
 
-res1 <- fitShape(log2pcounts) # Without adjustment for strain.
-res2 <- fitShape(resids) # With adjustment for strain.
+res1 <- fitShape(t(log2pcounts)) # Without adjustment for strain.
+res2 <- fitShape(t(resids)) # With adjustment for strain.
 
-plotSO(res1$lrats[, "t3"], res1$lrats[, "t4"], 
+plotSO(res1$lrats["LR3",], res1$lrats["LR4",], 
        dataName = "Bottomly (No adjustment)") 
-plotSO(res2$lrats[, "t3"], res2$lrats[, "t4"], 
+plotSO(res2$lrats["LR3",], res2$lrats["LR4",], 
        dataName="Bottomly (Strain type adjusted)")
 @
 
@@ -757,15 +757,15 @@ aveDBA <- rowMeans(log2pcounts[, cond=="DBA/2J"])
 lfc <-  aveC57BL - aveDBA
 
 # Fold change vs. L-kurt (no adjustment for strain type)
-rang <- range(c(res1$lrats[, "t4"], res2$lrats[, "t4"]))
+rang <- range(c(res1$lrats["LR4",], res2$lrats["LR4",]))
 
-plot(lfc, res1$lrats[, "t4"], pch=".", col="gray",
+plot(lfc, res1$lrats["LR4",], pch=".", col="gray",
      ylab="L-kurt", xlab="log2 fold change",
      main="No adjustment", ylim=rang)
 abline(h=0, lty=2, col="red")
 
 # Fold change vs. L-kurt (adjusted for strain type)
-plot(lfc, res2$lrats[, "t4"], pch=".", col="gray",
+plot(lfc, res2$lrats["LR4",], pch=".", col="gray",
      ylab="L-kurt", xlab="log2 fold change",
      main="Resids", ylim=c(rang))
 abline(h=0, lty=2, col="red")
@@ -773,6 +773,51 @@ abline(h=0, lty=2, col="red")
 
 \noindent Only a few genes change L-kurt estimates
 after we adjust for strain.
+
+\section{Shape manova}
+We can use L-moments to summarize the distribution of gene expressions
+for each sample. We will demonstrate this with the un-normalized 
+bottomly dataset loaded from the previous section (currently defined as counts). 
+Below are density plots of the first five samples.
+
+<<shapeManova1, fig.width=7, fig.height=3, fig.align='center', echo=FALSE>>=
+par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 2, 0.5))
+plot(density(log2(counts+1)[,1]), main="First 5 samples in bottomly")
+for (k in 2:5) points(density(log2(counts+1)[,k]), type="l", col=k)
+
+legend("topright", legend=names(counts)[1:5], 
+       col=1:5, pch=19, cex=0.8)
+@
+
+We can summarize the shape of these samples with L-moments statistics as
+shown below.
+<<shapeManova2>>=
+fitShape(log2(counts+1)[,1:5]) # counts equals raw counts
+@
+\noindent Based on these statistics we can test whether the sample distributions
+differ across biological groups. The shapeManova function tests this
+hypothesis by performing a multivariate anova (manova) on the first four L-moments. 
+It also provides single anova p-values for each L-moment separately.
+
+<<shapeManova3, fig.width=7, fig.height=3, fig.align='center', echo=FALSE>>=
+par(mgp=c(1.5, 0.5, 0), mar=c(2.5, 2.5, 2, 0.5))
+plot(density(log2(counts+1)[,1]), main="All samples in bottomly")
+for (k in 2:length(counts)) points(density(log2(counts+1)[,k]), type="l", 
+                                   col=ifelse(cond[k]=="C57BL/6J", "black", "red"))
+
+legend("topright", legend=c("C57BL/6J", "DBA/2J"), 
+       col=c("black", "red"), pch=19, cex=0.8)
+@
+
+<<shapeManova4, fig.width=7, fig.height=3, fig.align='center'>>=
+table(cond)
+boxplotSLM(data=log2(counts+1), groups=cond, data.name="Bottomly", 
+           group.col=rep(c("black", "red"), table(cond)))
+shapeManova(data=log2(counts+1), groups=cond)
+@
+\noindent Individually, all the L-moments are not significantly different across the 
+two mouse strains. Suggesting that the sample distributions are not significanlty
+different across the mouse strains. Jointly, the manova p-value of 0.844 confirms this.
 
 \section{Summary and discussion}
 
