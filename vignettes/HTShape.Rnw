@@ -298,7 +298,7 @@ package into an \texttt{R} session and looking at the
 datasets available in the package.
 
 <<datasets>>=
-library(shape)
+library(HTShape)
 data(examplesData) # Load datasets.
 names(examplesData)
 @

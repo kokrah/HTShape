@@ -87,6 +87,7 @@ shapeManova = function (data, groups, nPerm=500, lrats=FALSE, plot=FALSE, groupC
            title="Groups")
   }
   
-  pval
+  list(pvals = apply(Y, 2, function(x) summary(aov(x ~ groups))[[1]][1,"Pr(>F)"]),
+       manova.pval = pval)
 }
 
