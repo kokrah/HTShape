@@ -42,9 +42,9 @@ shapeManova = function (data, groups, nPerm=500, lrats=FALSE, plot=FALSE, groupC
     
   for (k in 1:nPerm) {
     # Make design matrix
-    groups = sample(groups, length(groups), replace=FALSE)
+    groups0 = sample(groups, length(groups), replace=FALSE)
       
-    X = model.matrix(~ 0 + factor(groups))
+    X = model.matrix(~ 0 + factor(groups0))
       
     # Compute group means
     B = solve(t(X) %*% X) %*% t(X) %*% Y
@@ -84,13 +84,13 @@ shapeManova = function (data, groups, nPerm=500, lrats=FALSE, plot=FALSE, groupC
                       colsep=cumsum(table(groups)), main=main)
     
     legend("bottomleft", legend=unique(groups), pch=19, col=unique(groupCol), 
-           title="Groups")
+           title="Groups", cex=0.8)
   }
   
   pvals = apply(Y, 2, function(x) summary(aov(x ~ groups))[[1]][1,"Pr(>F)"])
   pvals = p.adjust(pvals, method="bonferroni")
   
-  list(apvals = round(pvals,3), manova.pval = round(pval, 3))
+  list(apvals = round(pvals, 3), manova.pval = round(pval, 3))
   
 }
 

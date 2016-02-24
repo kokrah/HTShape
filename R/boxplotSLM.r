@@ -2,12 +2,16 @@
 #' 
 #' @param data data matrix
 #' @param groups a character vector indicating sample group membership
-#' @param data.name character vector indicating name of dataset.
-#' @param show.points show.points
-#' @param group.col group.col
+#' @param dataName character vector indicating name of dataset.
+#' @param showPoints show data points
+#' @param groupCol group color
 #' @param ... arguments passed to boxplots
 #' @export
-boxplotSLM = function(data, groups, data.name=NULL, show.points=TRUE, group.col=NULL, ...) {
+boxplotSLM = function(data, groups, dataName=NULL, showPoints=TRUE, groupCol=NULL, ...) {
+  data.name = dataName
+  show.points = showPoints
+  group.col = groupCol
+  
   fit = fitShape(data)
   LM = fit$lmoms  
   

@@ -4,19 +4,19 @@
 \alias{boxplotSLM}
 \title{Boxplot of sample L-moments (boxplotSLM)}
 \usage{
-boxplotSLM(data, groups, data.name = NULL, show.points = TRUE,
-  group.col = NULL, ...)
+boxplotSLM(data, groups, dataName = NULL, showPoints = TRUE,
+  groupCol = NULL, ...)
 }
 \arguments{
 \item{data}{data matrix}
 
 \item{groups}{a character vector indicating sample group membership}
 
-\item{data.name}{character vector indicating name of dataset.}
+\item{dataName}{character vector indicating name of dataset.}
 
-\item{show.points}{show.points}
+\item{showPoints}{show data points}
 
-\item{group.col}{group.col}
+\item{groupCol}{group color}
 
 \item{...}{arguments passed to boxplots}
 }

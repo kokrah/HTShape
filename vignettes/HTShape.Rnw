@@ -814,12 +814,12 @@ legend("topright", legend=c("C57BL/6J", "DBA/2J"),
 <<shapeManova4, fig.width=7, fig.height=4, fig.align='center'>>=
 table(cond)
 boxplotSLM(data=log2(counts+1), groups=cond, data.name="Bottomly", 
-           group.col=rep(c("black", "red"), table(cond)))
+           groupCol=rep(c("black", "red"), table(cond)))
 shapeManova(data=log2(counts+1), groups=cond)
 @
 \noindent Individually, all the L-moments are not significantly different across the 
 two mouse strains. Suggesting that the sample distributions are not significanlty
-different across the mouse strains. Jointly, the manova p-value of 0.844 confirms this.
+different across the mouse strains. Jointly, the manova p-value confirms this.
 
 \section{Summary and discussion}
 
